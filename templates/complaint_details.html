@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+
+<h2>Complaint Details</h2>
+
+
+<p>
+<b>Reference:</b>
+{{ complaint.complaint_ref }}
+</p>
+
+
+<p>
+<b>Title:</b>
+{{ complaint.title }}
+</p>
+
+
+<p>
+<b>Description:</b>
+{{ complaint.description }}
+</p>
+
+
+<p>
+<b>Category:</b>
+{{ complaint.category }}
+</p>
+
+
+<p>
+<b>Priority:</b>
+{{ complaint.priority }}
+</p>
+
+
+<p>
+<b>Status:</b>
+{{ complaint.status }}
+</p>
+
+
+<p>
+<b>Date:</b>
+{{ complaint.date_submitted }}
+</p>
+
+
+<a href="{{ url_for('complaint_history') }}">
+Back
+</a>
+
+
+</div>
+
+
+{% endblock %}

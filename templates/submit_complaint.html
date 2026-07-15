@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}File Complaint - Employee Complaint CRM{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Breadcrumbs -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('employee_dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">File New Complaint</li>
+                </ol>
+            </nav>
+            <!-- Submission Form Card -->
+            <div class="card crm-card p-4 bg-white mt-3">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
+                        <i class="bi bi-pencil-square fs-3"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Submit a New Complaint</h2>
+                        <p class="text-muted mb-0">Describe your concern accurately. It will be logged with a unique reference number.</p>
+                    </div>
+                </div>
+                <form action="{{ url_for('submit_complaint') }}" method="POST" class="needs-validation" novalidate>
+                    <!-- Complaint Title -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold">Complaint Title / Summary</label>
+                        <input type="text" class="form-control crm-form-control" id="title" name="title" placeholder="Briefly state the issue (e.g. WiFi down on 3rd floor)" required>
+                        <div class="invalid-feedback">Please enter a complaint title.</div>
+                    </div>
+                    <!-- Category & Priority -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label fw-semibold">Category</label>
+                            <select class="form-select crm-form-control" id="category" name="category" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="IT Support">IT Support</option>
+                                <option value="HR">HR</option>
+                                <option value="Payroll">Payroll</option>
+                                <option value="Infrastructure">Infrastructure</option>
+                                <option value="Facilities">Facilities</option>
+                                <option value="Network Issue">Network Issue</option>
+                                <option value="Software Issue">Software Issue</option>
+                                <option value="Hardware Issue">Hardware Issue</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a category.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="priority" class="form-label fw-semibold">Severity / Priority</label>
+                            <select class="form-select crm-form-control" id="priority" name="priority" required>
+                                <option value="" disabled selected>Select Priority</option>
+                                <option value="Low">Low (General query / non-blocking)</option>
+                                <option value="Medium">Medium (Affects daily tasks, workaround exists)</option>
+                                <option value="High">High (Major disruption, blocking work)</option>
+                                <option value="Critical">Critical (System down, security, major incident)</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a priority level.</div>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold">Detailed Description</label>
+                        <textarea class="form-control crm-form-control" id="description" name="description" rows="6" placeholder="Provide as much details, steps to reproduce, or background context as possible to help administrators resolve the issue quickly..." required></textarea>
+                        <div class="invalid-feedback">Please describe the complaint in detail.</div>
+                    </div>
+                    <!-- Submit Buttons -->
+                    <div class="d-flex justify-content-end gap-3">
+                        <a href="{{ url_for('employee_dashboard') }}" class="btn btn-outline-secondary px-4 py-2 rounded-3">Cancel</a>
+                        <button type="submit" class="btn btn-crm-primary px-4 py-2">
+                            <i class="bi bi-send-fill me-2"></i> Submit Complaint
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
+{% endblock %}

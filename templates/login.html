@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Login - Employee Complaint CRM{% endblock %}
+{% block guest_content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="bi bi-shield-lock display-5 text-primary mb-2"></i>
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="text-muted">Access the CRM system by logging into your account</p>
+            </div>
+            <!-- Login tabs to switch between Employee and Admin -->
+            <ul class="nav nav-pills nav-fill mb-4 p-1 bg-light rounded-3" id="loginTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active py-2 rounded-3" id="employee-login-tab" data-bs-toggle="pill" data-bs-target="#employee-login" type="button" role="tab" aria-controls="employee-login" aria-selected="true">
+                        <i class="bi bi-person-badge"></i> Employee
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link py-2 rounded-3" id="admin-login-tab" data-bs-toggle="pill" data-bs-target="#admin-login" type="button" role="tab" aria-controls="admin-login" aria-selected="false">
+                        <i class="bi bi-shield-fill"></i> Admin
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="loginTabContent">
+                <!-- Employee Login Form -->
+                <div class="tab-pane fade show active" id="employee-login" role="tabpanel" aria-labelledby="employee-login-tab">
+                    <form action="{{ url_for('login') }}" method="POST" class="needs-validation" novalidate>
+                        <input type="hidden" name="role" value="employee">
+                        <div class="mb-3">
+                            <label for="employeeEmail" class="form-label fw-semibold">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control crm-form-control border-start-0" id="employeeEmail" name="email" placeholder="name@company.com" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="employeePassword" class="form-label fw-semibold">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-key"></i></span>
+                                <input type="password" class="form-control crm-form-control border-start-0" id="employeePassword" name="password" placeholder="••••••••" required>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-crm-primary w-100 py-3">Employee Sign In</button>
+                    </form>
+                    <div class="text-center mt-4">
+                        <span class="text-muted">New employee?</span> <a href="{{ url_for('register') }}" class="fw-semibold text-primary">Register Here</a>
+                    </div>
+                </div>
+                <!-- Admin Login Form -->
+                <div class="tab-pane fade" id="admin-login" role="tabpanel" aria-labelledby="admin-login-tab">
+                    <form action="{{ url_for('login') }}" method="POST" class="needs-validation" novalidate>
+                        <input type="hidden" name="role" value="admin">
+                        <div class="mb-3">
+                            <label for="adminEmail" class="form-label fw-semibold">Admin Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope-fill"></i></span>
+                                <input type="email" class="form-control crm-form-control border-start-0" id="adminEmail" name="email" placeholder="admin@crm.com" required>
+                                <div class="invalid-feedback">Please enter a valid admin email.</div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="adminPassword" class="form-label fw-semibold">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-key-fill"></i></span>
+                                <input type="password" class="form-control crm-form-control border-start-0" id="adminPassword" name="password" placeholder="••••••••" required>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-crm-secondary w-100 py-3">Admin Sign In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
+{% endblock %}

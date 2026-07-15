@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Complaint History - Employee Complaint CRM{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 fw-bold mb-1">My Complaint History</h1>
+                <p class="text-muted">Search, filter, and track all complaints you have submitted.</p>
+            </div>
+            <a href="{{ url_for('submit_complaint') }}" class="btn btn-crm-primary">
+                <i class="bi bi-plus-circle"></i> File New Complaint
+            </a>
+        </div>
+    </div>
+    <!-- Search and Filters Form -->
+    <div class="card crm-card p-4 bg-white mb-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2"></i> Search and Filter</h5>
+        <form action="{{ url_for('complaint_history') }}" method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label for="search" class="form-label small fw-semibold text-muted">Search Text</label>
+                <input type="text" class="form-control crm-form-control" id="search" name="search" placeholder="Ref ID, title..." value="{{ filters.search }}">
+            </div>
+            <div class="col-md-3">
+                <label for="category" class="form-label small fw-semibold text-muted">Category</label>
+                <select class="form-select crm-form-control" id="category" name="category">
+                    <option value="">All Categories</option>
+                    <option value="IT Support" {% if filters.category == 'IT Support' %}selected{% endif %}>IT Support</option>
+                    <option value="HR" {% if filters.category == 'HR' %}selected{% endif %}>HR</option>
+                    <option value="Payroll" {% if filters.category == 'Payroll' %}selected{% endif %}>Payroll</option>
+                    <option value="Infrastructure" {% if filters.category == 'Infrastructure' %}selected{% endif %}>Infrastructure</option>
+                    <option value="Facilities" {% if filters.category == 'Facilities' %}selected{% endif %}>Facilities</option>
+                    <option value="Network Issue" {% if filters.category == 'Network Issue' %}selected{% endif %}>Network Issue</option>
+                    <option value="Software Issue" {% if filters.category == 'Software Issue' %}selected{% endif %}>Software Issue</option>
+                    <option value="Hardware Issue" {% if filters.category == 'Hardware Issue' %}selected{% endif %}>Hardware Issue</option>
+                    <option value="Other" {% if filters.category == 'Other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label small fw-semibold text-muted">Status</label>
+                <select class="form-select crm-form-control" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="Pending" {% if filters.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Assigned" {% if filters.status == 'Assigned' %}selected{% endif %}>Assigned</option>
+                    <option value="In Progress" {% if filters.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Resolved" {% if filters.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                    <option value="Closed" {% if filters.status == 'Closed' %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="priority" class="form-label small fw-semibold text-muted">Priority</label>
+                <select class="form-select crm-form-control" id="priority" name="priority">
+                    <option value="">All Priorities</option>
+                    <option value="Low" {% if filters.priority == 'Low' %}selected{% endif %}>Low</option>
+                    <option value="Medium" {% if filters.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                    <option value="High" {% if filters.priority == 'High' %}selected{% endif %}>High</option>
+                    <option value="Critical" {% if filters.priority == 'Critical' %}selected{% endif %}>Critical</option>
+                </select>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-crm-secondary w-100 py-2" title="Search"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+    </div>
+    <!-- History List Card -->
+    <div class="crm-table-container bg-white">
+        <div class="table-responsive">
+            {% if complaints %}
+                <table class="table table-hover crm-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Ref ID</th>
+                            <th>Complaint Title</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Date Filed</th>
+                            <th>Last Updated</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for complaint in complaints %}
+                            <tr>
+                                <td><span class="fw-bold text-dark">{{ complaint.complaint_ref }}</span></td>
+                                <td>
+                                    <div class="fw-semibold">{{ complaint.title }}</div>
+                                    <small class="text-muted d-block text-truncate" style="max-width: 250px;">{{ complaint.description }}</small>
+                                </td>
+                                <td>{{ complaint.category }}</td>
+                                <td>
+                                    {% if complaint.priority == 'Critical' %}
+                                        <span class="badge badge-priority-critical">Critical</span>
+                                    {% elif complaint.priority == 'High' %}
+                                        <span class="badge badge-priority-high">High</span>
+                                    {% elif complaint.priority == 'Medium' %}
+                                        <span class="badge badge-priority-medium">Medium</span>
+                                    {% else %}
+                                        <span class="badge badge-priority-low">Low</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if complaint.status == 'Pending' %}
+                                        <span class="badge badge-status-pending">Pending</span>
+                                    {% elif complaint.status == 'Assigned' %}
+                                        <span class="badge badge-status-assigned">Assigned</span>
+                                    {% elif complaint.status == 'In Progress' %}
+                                        <span class="badge badge-status-inprogress">In Progress</span>
+                                    {% elif complaint.status == 'Resolved' %}
+                                        <span class="badge badge-status-resolved">Resolved</span>
+                                    {% else %}
+                                        <span class="badge badge-status-closed">Closed</span>
+                                    {% endif %}
+                                </td>
+                                <td><small>{{ complaint.date_submitted }}</small></td>
+                                <td><small class="text-muted">{{ complaint.last_updated }}</small></td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailModal{{ complaint.id }}" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Detail Modal -->
+                            <div class="modal fade" id="detailModal{{ complaint.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header bg-light border-0 py-3">
+                                            <h5 class="modal-title fw-bold text-dark">
+                                                <i class="bi bi-info-circle text-primary me-2"></i> Complaint Details - {{ complaint.complaint_ref }}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-4">
+                                            <h4 class="fw-bold text-primary mb-3">{{ complaint.title }}</h4>
+                                            
+                                            <div class="row mb-4">
+                                                <div class="col-md-4">
+                                                    <small class="text-muted d-block">Category</small>
+                                                    <strong class="text-dark">{{ complaint.category }}</strong>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small class="text-muted d-block">Priority</small>
+                                                    <div>
+                                                        {% if complaint.priority == 'Critical' %}
+                                                            <span class="badge badge-priority-critical">Critical</span>
+                                                        {% elif complaint.priority == 'High' %}
+                                                            <span class="badge badge-priority-high">High</span>
+                                                        {% elif complaint.priority == 'Medium' %}
+                                                            <span class="badge badge-priority-medium">Medium</span>
+                                                        {% else %}
+                                                            <span class="badge badge-priority-low">Low</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small class="text-muted d-block">Status</small>
+                                                    <div>
+                                                        {% if complaint.status == 'Pending' %}
+                                                            <span class="badge badge-status-pending">Pending</span>
+                                                        {% elif complaint.status == 'Assigned' %}
+                                                            <span class="badge badge-status-assigned">Assigned</span>
+                                                        {% elif complaint.status == 'In Progress' %}
+                                                            <span class="badge badge-status-inprogress">In Progress</span>
+                                                        {% elif complaint.status == 'Resolved' %}
+                                                            <span class="badge badge-status-resolved">Resolved</span>
+                                                        {% else %}
+                                                            <span class="badge badge-status-closed">Closed</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <small class="text-muted d-block mb-1">Description</small>
+                                                <div class="bg-light p-3 rounded-3 text-dark style-description" style="white-space: pre-wrap; font-size: 0.95rem;">{{ complaint.description }}</div>
+                                            </div>
+                                            <div class="row text-muted small border-top pt-3">
+                                                <div class="col-sm-6">
+                                                    <i class="bi bi-calendar-event me-1"></i> Submitted: {{ complaint.date_submitted }}
+                                                </div>
+                                                <div class="col-sm-6 text-sm-end">
+                                                    <i class="bi bi-arrow-clockwise me-1"></i> Last Updated: {{ complaint.last_updated }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0 bg-light py-2">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-search display-6"></i>
+                    <p class="mt-2 mb-0">No complaints match your search filters.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

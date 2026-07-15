@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}Employee Dashboard - Employee Complaint CRM{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 fw-bold mb-1">Welcome back, {{ session.get('name') }}!</h1>
+                <p class="text-muted">Here is a summary of your filed complaints and statuses.</p>
+            </div>
+            <div class="d-flex gap-2">
+
+    <a href="{{ url_for('submit_complaint') }}" class="btn btn-crm-primary">
+        <i class="bi bi-plus-circle"></i> File New Complaint
+    </a>
+
+
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
+        <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+
+</div>
+        </div>
+    </div>
+    <!-- Stats Cards Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card crm-card gradient-card-1 text-white p-3 h-100">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-0 text-white-50 fw-semibold text-uppercase small">Total Complaints</p>
+                        <h2 class="display-6 fw-bold mt-2 mb-0">{{ stats.total }}</h2>
+                    </div>
+                    <div class="bg-white bg-opacity-20 p-2 rounded-3">
+                        <i class="bi bi-list-task fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card crm-card bg-white p-3 h-100 border-start border-warning border-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-0 text-muted fw-semibold text-uppercase small">Pending Review</p>
+                        <h2 class="display-6 fw-bold mt-2 mb-0 text-warning">{{ stats.pending }}</h2>
+                    </div>
+                    <div class="bg-warning bg-opacity-10 p-2 rounded-3 text-warning">
+                        <i class="bi bi-clock-history fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card crm-card bg-white p-3 h-100 border-start border-primary border-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-0 text-muted fw-semibold text-uppercase small">In Progress</p>
+                        <h2 class="display-6 fw-bold mt-2 mb-0 text-primary">{{ stats.in_progress }}</h2>
+                    </div>
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
+                        <i class="bi bi-gear-wide-connected fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card crm-card bg-white p-3 h-100 border-start border-success border-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-0 text-muted fw-semibold text-uppercase small">Resolved & Closed</p>
+                        <h2 class="display-6 fw-bold mt-2 mb-0 text-success">{{ stats.resolved_closed }}</h2>
+                    </div>
+                    <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success">
+                        <i class="bi bi-check2-circle fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Profile & Recent Activity Grid -->
+    <div class="row g-4">
+        <!-- Quick Profile Card -->
+        <div class="col-lg-4">
+            <div class="card crm-card p-4 h-100 bg-white">
+                <h4 class="fw-bold mb-4">Employee Details</h4>
+                <div class="text-center mb-4">
+                    <div class="profile-avatar mx-auto mb-3">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <h5 class="fw-bold mb-1">{{ employee.name }}</h5>
+                    <span class="badge bg-secondary mb-2">{{ employee.designation }}</span>
+                </div>
+                <hr class="text-muted opacity-25">
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="bi bi-envelope me-2"></i>Email:</span>
+                        <strong class="text-dark">{{ employee.email }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="bi bi-telephone me-2"></i>Phone:</span>
+                        <strong class="text-dark">{{ employee.phone }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="bi bi-building me-2"></i>Department:</span>
+                        <strong class="text-dark">{{ employee.department }}</strong>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('profile') }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-pencil-square"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Recent Complaints Table -->
+        <div class="col-lg-8">
+            <div class="crm-table-container h-100 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold mb-0">Recent Complaints</h4>
+                    <a href="{{ url_for('complaint_history') }}" class="btn btn-sm btn-link text-primary fw-semibold text-decoration-none">
+                        View All History <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    {% if recent_complaints %}
+                        <table class="table table-hover crm-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Ref ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in recent_complaints %}
+                                    <tr>
+                                        <td><span class="fw-bold text-dark">{{ complaint.complaint_ref }}</span></td>
+                                        <td>{{ complaint.title }}</td>
+                                        <td>{{ complaint.category }}</td>
+                                        <td>
+                                            {% if complaint.priority == 'Critical' %}
+                                                <span class="badge badge-priority-critical">Critical</span>
+                                            {% elif complaint.priority == 'High' %}
+                                                <span class="badge badge-priority-high">High</span>
+                                            {% elif complaint.priority == 'Medium' %}
+                                                <span class="badge badge-priority-medium">Medium</span>
+                                            {% else %}
+                                                <span class="badge badge-priority-low">Low</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if complaint.status == 'Pending' %}
+                                                <span class="badge badge-status-pending">Pending</span>
+                                            {% elif complaint.status == 'Assigned' %}
+                                                <span class="badge badge-status-assigned">Assigned</span>
+                                            {% elif complaint.status == 'In Progress' %}
+                                                <span class="badge badge-status-inprogress">In Progress</span>
+                                            {% elif complaint.status == 'Resolved' %}
+                                                <span class="badge badge-status-resolved">Resolved</span>
+                                            {% else %}
+                                                <span class="badge badge-status-closed">Closed</span>
+                                            {% endif %}
+                                        </td>
+                                        <td><small class="text-muted">{{ complaint.date_submitted.split(' ')[0] }}</small></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-clipboard2-x display-6"></i>
+                            <p class="mt-2 mb-0">No complaints filed yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

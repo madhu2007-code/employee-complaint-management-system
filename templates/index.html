@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Welcome - Employee Complaint CRM{% endblock %}
+{% block guest_content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate-fade-in">
+                <span class="hero-badge">Empowering Workplace Harmony</span>
+                <h1 class="display-4 fw-bold text-white mb-3">Centralized Employee Complaint Management</h1>
+                <p class="lead text-white-50 mb-4">A modern digital platform to voice concerns, track resolutions in real-time, and build a more transparent workplace environment.</p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('login') }}" class="btn btn-crm-secondary btn-lg px-4 text-white">
+                        <i class="bi bi-box-arrow-in-right"></i> Access Portal
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-person-plus"></i> Join System
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                <div class="bg-white bg-opacity-10 p-4 rounded-4 border border-light border-opacity-10 shadow">
+                    <i class="bi bi-shield-check display-1 text-white opacity-75"></i>
+                    <h3 class="text-white mt-3">Secure & Confidential</h3>
+                    <p class="text-white-50">Complaints are securely routed directly to designated departments with fully transparent status tracking.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container my-5 py-4">
+    <div class="row text-center mb-5">
+        <div class="col-lg-8 mx-auto">
+            <span class="text-primary fw-bold text-uppercase tracking-wider">How it works</span>
+            <h2 class="fw-bold mt-2">Streamlined Complaint Resolution Workflow</h2>
+            <p class="text-muted">A clear, automated path from submission to complete resolution.</p>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 crm-card p-4 text-center">
+                <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mx-auto mb-3">
+                    <i class="bi bi-pencil-square text-primary fs-3"></i>
+                </div>
+                <h4 class="fw-bold">1. File Complaint</h4>
+                <p class="text-muted mb-0">Submit your concerns using simple forms. Categorize support request, payroll issue, HR complaint, facilities or custom categories.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 crm-card p-4 text-center">
+                <div class="rounded-circle bg-purple bg-opacity-10 d-inline-flex p-3 mx-auto mb-3" style="background-color: rgba(118, 75, 162, 0.1);">
+                    <i class="bi bi-clock-history fs-3" style="color: var(--accent-purple);"></i>
+                </div>
+                <h4 class="fw-bold">2. Track Status</h4>
+                <p class="text-muted mb-0">Follow the progress live in your dashboard. Receive immediate priority and team assignment details transparently.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 crm-card p-4 text-center">
+                <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mx-auto mb-3">
+                    <i class="bi bi-check2-circle text-success fs-3"></i>
+                </div>
+                <h4 class="fw-bold">3. Rapid Resolution</h4>
+                <p class="text-muted mb-0">Administrators evaluate, assign, resolve, and close complaints, ensuring all employee concerns are handled with diligence.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
